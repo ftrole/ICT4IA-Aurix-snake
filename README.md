@@ -3,10 +3,8 @@
 Timeline:
 
 1. Understanding input from joystick and output to the led panel.
-
-  1. Joystick: Francesco and Arash.
-  
-  2. LEDs: Alexander and Marcello.
+    1. Joystick: Francesco and Arash.
+    2. LEDs: Alexander and Marcello.
 
 2. Moving a LED (snake) based on the joystick input.
 
