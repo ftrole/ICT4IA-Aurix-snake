@@ -7,7 +7,7 @@
     "NEVER-EXCLUDE-FROM-BUILD": "/Libraries/iLLD/TC37A/Tricore/Cpu/CStart#/Libraries/iLLD/TC37A/Tricore/Cpu/Trap#/Configurations#/Configurations/Debug",
     "aurixDevice": "TC37xTP_A-Step",
     "DEVICE-ID": "TC37A",
-    "projectName": "ADC_Queued_Scan_1_KIT_TC375_LK",
+    "projectName": "Snake_Game_KIT_TC375_LK",
     "AURIX-LIBRARY-PATH": "Libraries/iLLD#Libraries/Infra#Libraries/Service",
     "PROJECT-VERSION": "1.0"
   },

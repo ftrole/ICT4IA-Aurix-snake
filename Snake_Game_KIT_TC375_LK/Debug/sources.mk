@@ -30,6 +30,7 @@ Configurations \
 Libraries/Infra/Platform/Tricore/Compilers \
 Libraries/Infra/Ssw/TC37A/Tricore \
 Libraries/Service/CpuGeneric/StdIf \
+Libraries/Service/CpuGeneric/SysSe/Bsp \
 Libraries/iLLD/TC37A/Tricore/Asclin/Asc \
 Libraries/iLLD/TC37A/Tricore/Asclin/Std \
 Libraries/iLLD/TC37A/Tricore/Cpu/Irq \

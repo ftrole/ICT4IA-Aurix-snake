@@ -25,6 +25,7 @@ RM := rm -rf
 -include Libraries/iLLD/TC37A/Tricore/Cpu/Irq/subdir.mk
 -include Libraries/iLLD/TC37A/Tricore/Asclin/Std/subdir.mk
 -include Libraries/iLLD/TC37A/Tricore/Asclin/Asc/subdir.mk
+-include Libraries/Service/CpuGeneric/SysSe/Bsp/subdir.mk
 -include Libraries/Service/CpuGeneric/StdIf/subdir.mk
 -include Libraries/Infra/Ssw/TC37A/Tricore/subdir.mk
 -include Libraries/Infra/Platform/Tricore/Compilers/subdir.mk
@@ -62,33 +63,33 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := ADC_Queued_Scan_1_KIT_TC375_LK
+BUILD_ARTIFACT_NAME := Snake_Game_KIT_TC375_LK
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_SIZE += \
-ADC_Queued_Scan_1_KIT_TC375_LK.siz \
+Snake_Game_KIT_TC375_LK.siz \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: ADC_Queued_Scan_1_KIT_TC375_LK.elf secondary-outputs
+main-build: Snake_Game_KIT_TC375_LK.elf secondary-outputs
 
 # Tool invocations
-ADC_Queued_Scan_1_KIT_TC375_LK.elf: $(OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
+Snake_Game_KIT_TC375_LK.elf: $(OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: TASKING Linker'
-	cctc -lrt -lfp_fpu -lcs_fpu  -Wl-Oc -Wl-OL -Wl-Ot -Wl-Ox -Wl-Oy -Wl--map-file="ADC_Queued_Scan_1_KIT_TC375_LK.map" -Wl-mc -Wl-mf -Wl-mi -Wl-mk -Wl-ml -Wl-mm -Wl-md -Wl-mr -Wl-mu --no-warnings= -Wl--error-limit=42 --exceptions --strict --anachronisms --force-c++ -Ctc37x   -o"ADC_Queued_Scan_1_KIT_TC375_LK.elf" -Wl-o"ADC_Queued_Scan_1_KIT_TC375_LK.hex:IHEX" --lsl-core=vtc  --lsl-file=../Lcf_Tasking_Tricore_Tc.lsl $(OBJS)
+	cctc -lrt -lfp_fpu -lcs_fpu  -Wl-Oc -Wl-OL -Wl-Ot -Wl-Ox -Wl-Oy -Wl--map-file="Snake_Game_KIT_TC375_LK.map" -Wl-mc -Wl-mf -Wl-mi -Wl-mk -Wl-ml -Wl-mm -Wl-md -Wl-mr -Wl-mu --no-warnings= -Wl--error-limit=42 --exceptions --strict --anachronisms --force-c++ -Ctc37x   -o"Snake_Game_KIT_TC375_LK.elf" -Wl-o"Snake_Game_KIT_TC375_LK.hex:IHEX" --lsl-core=vtc  --lsl-file=../Lcf_Tasking_Tricore_Tc.lsl $(OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-ADC_Queued_Scan_1_KIT_TC375_LK.siz: ADC_Queued_Scan_1_KIT_TC375_LK.elf makefile objects.mk $(OPTIONAL_TOOL_DEPS)
+Snake_Game_KIT_TC375_LK.siz: Snake_Game_KIT_TC375_LK.elf makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Invoking: Print Size'
-	elfsize  "ADC_Queued_Scan_1_KIT_TC375_LK.elf"
+	elfsize  "Snake_Game_KIT_TC375_LK.elf"
 	@echo 'Finished building: $@'
 	@echo ' '
 
