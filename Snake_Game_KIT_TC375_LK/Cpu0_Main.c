@@ -40,7 +40,6 @@
 #include "Ifx_Types.h"
 #include "IfxCpu.h"
 #include "IfxScuWdt.h"
-//#include "ADC_Queued_Scan.h"
 #include "game.h"
 
 IFX_ALIGN(4) IfxCpu_syncEvent g_cpuSyncEvent = 0;
@@ -58,10 +57,7 @@ void core0_main(void)
     /* Wait for CPU sync event */
     IfxCpu_emitEvent(&g_cpuSyncEvent);
     IfxCpu_waitEvent(&g_cpuSyncEvent, 1);
-    
-    /* Function to initialize the game with default parameters */
-    initGame();
 
     /* run the game */
-     runGame();
+    runGame();
 }

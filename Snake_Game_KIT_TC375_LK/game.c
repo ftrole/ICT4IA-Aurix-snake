@@ -1,10 +1,5 @@
-#include "ADC_Queued_Scan.h"
 #include <math.h>
-
-typedef enum {
-   F, T
-} bool;
-
+#include "game.h"
 
 // LED matrix brightness: between 0(darkest) and 15(brightest) TODO: check this
 const short intensity = 8;
@@ -12,8 +7,8 @@ const short intensity = 8;
 // lower = faster message scrolling
 const short messageSpeed = 5;
 
-bool win = F;
-bool gameOver = F;
+short win = 0;
+short gameOver = 0;
 
 struct Point {
     int row;
@@ -25,19 +20,19 @@ struct Coordinate {
     int y;
 };
 
-struct Coordinate joystickHome = {500, 500};
+struct Coordinate joystickHome = {2100, 2100};
 
 // primary snake head coordinates (snake head), it will be randomly generated
 struct Point snake;
 
 // food is not anywhere yet
-struct Point food= {-1, -1};
+struct Point food = {-1, -1};
 
 // snake parameters
 // initial snake length (1...63, recommended 3)
 int snakeLength = 3; // choosed by the user in the config section
-int snakeSpeed = 1; // will be set according to potentiometer value, cannot be 0
-int snakeDirection = 0; // if it is 0, the snake does not move
+int snakeSpeed = 500; // will be set according to potentiometer value, cannot be 0
+short snakeDirection = 0; // if it is 0, the snake does not move
 
 // direction constants
 const short up     = 1;
@@ -46,7 +41,7 @@ const short down   = 3; // 'down - 2' must be 'up'
 const short left   = 4; // 'left - 2' must be 'right'
 
 // threshold where movement of the joystick will be accepted
-const int joystickThreshold = 160;
+const int joystickThreshold = 1000;
 
 // artificial logarithmity (steepness) of the potentiometer (-1 = linear, 1 = natural, bigger = steeper (recommended 0...1))
 const float logarithmity = 0.4;
@@ -65,11 +60,14 @@ float mapf(float x, float in_min, float in_max, float out_min, float out_max) {
 
 // calibrate the joystick home for 10 times
 void calibrateJoystick() {
-    struct Coordinate values;
+    struct Coordinate values = {0, 0};
 
     for (int i = 0; i < 10; i++) {
-        values.x = values.x + g_results[1].B.RESULT;
-        values.y = values.y + g_results[2].B.RESULT;
+        readEVADC();
+        int j_x= (int) g_results[1].B.RESULT;
+        int j_y= (int) g_results[2].B.RESULT;
+        values.x = values.x + j_x;
+        values.y = values.y + j_y;
     }
 
     joystickHome.x = values.x / 10;
@@ -86,7 +84,7 @@ void scanJoystick() {
         //float raw = mapf(analogRead(Pin::potentiometer), 0, 1023, 0, 1); TODO
         float raw = mapf(512, 0, 1023, 0, 1);
         snakeSpeed = mapf(pow(raw, 3.5), 0, 1, 10, 1000); // change the speed exponentially
-        if (snakeSpeed == 0) snakeSpeed = 1; // safety: speed can not be 0
+        if (snakeSpeed == 0) snakeSpeed = 500; // safety: speed can not be 0
 
         // determine the direction of the snake
         g_results[2].B.RESULT < joystickHome.y - joystickThreshold ? snakeDirection = up    : 0;
@@ -114,8 +112,11 @@ void initGame(void) {
 }
 
 void runGame(void) {
+    /* Function to initialize the game with default parameters */
+    initGame();
     while (1) {
         readEVADC();
+        scanJoystick();
     }
 }
 

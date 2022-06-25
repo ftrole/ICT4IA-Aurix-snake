@@ -172,7 +172,7 @@ void readEVADC()
 
     }
         IfxStdIf_DPipe_print(&g_stdInterface, "\r\n");
-        wait(IfxStm_getTicksFromMilliseconds(&MODULE_STM0, 1000));
+        //wait(IfxStm_getTicksFromMilliseconds(&MODULE_STM0, 1000));
 }
 /* ASCLIN TX Interrupt Service Routine */
 IFX_INTERRUPT(ISR_ASCLIN_Tx, 0, ISR_PRIORITY_ASCLIN_TX);
