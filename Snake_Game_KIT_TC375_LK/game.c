@@ -1,11 +1,19 @@
 #include <math.h>
+#include <string.h>
+#include <stdlib.h>
 #include "game.h"
 
 // LED matrix brightness: between 0(darkest) and 15(brightest) TODO: check this
 const short intensity = 8;
 
+// DEBUG: frequency for dumping gameboard
+int dump=0;
+
 // lower = faster message scrolling
 const short messageSpeed = 5;
+
+// initial snake length (1...63, recommended 3)
+const short initialSnakeLength = 3;
 
 short win = 0;
 short gameOver = 0;
@@ -78,6 +86,7 @@ void calibrateJoystick() {
 void scanJoystick() {
     int previousDirection = snakeDirection; // save the last direction
     long timestamp = now();
+    readEVADC();
 
     while (now() < timestamp + snakeSpeed) {
         // calculate snake speed exponentially (10...1000ms)
@@ -96,10 +105,220 @@ void scanJoystick() {
         snakeDirection + 2 == previousDirection && previousDirection != 0 ? snakeDirection = previousDirection : 0;
         snakeDirection - 2 == previousDirection && previousDirection != 0 ? snakeDirection = previousDirection : 0;
 
-        // intelligently blink with the food TODO
-        //matrix.setLed(0, food.row, food.col, millis() % 100 < 50 ? 1 : 0);
+        // intelligently blink with the food TODO: this is only to make the food led blink at fixed rate
+        //
     }
 }
+
+// if there is no food, generate one, also check for victory
+void generateFood() {
+    if (food.row == -1 || food.col == -1) {
+        // self-explanatory
+        if (snakeLength >= 64) {
+            win = 1;
+            return; // prevent the food generator from running, in this case it would run forever, because it will not be able to find a pixel without a snake
+        }
+
+        // generate food until it is in the right position
+        do {
+            food.col = rand()%8;
+            food.row = rand()%8;
+        } while (gameboard[food.row][food.col] > 0);
+    }
+}
+
+
+// causes the snake to appear on the other side of the screen if it gets out of the edge
+void fixEdge() {
+    snake.col < 0 ? snake.col += 8 : 0;
+    snake.col > 7 ? snake.col -= 8 : 0;
+    snake.row < 0 ? snake.row += 8 : 0;
+    snake.row > 7 ? snake.row -= 8 : 0;
+}
+
+// calculate snake movement data
+// TODO: uncomment setLed when available
+void calculateSnake() {
+    switch (snakeDirection) {
+        case 1: // up
+            snake.row--;
+            fixEdge();
+            //matrix.setLed(0, snake.row, snake.col, 1);
+            break;
+
+        case 2: // right
+            snake.col++;
+            fixEdge();
+            //matrix.setLed(0, snake.row, snake.col, 1);
+            break;
+
+        case 3:  // down
+            snake.row++;
+            fixEdge();
+            //matrix.setLed(0, snake.row, snake.col, 1);
+            break;
+
+        case 4:  //  left
+            snake.col--;
+            fixEdge();
+            //matrix.setLed(0, snake.row, snake.col, 1);
+            break;
+
+        default: // if the snake is not moving, exit
+            return;
+    }
+
+    // if there is a snake body segment, this will cause the end of the game (snake must be moving)
+    if (gameboard[snake.row][snake.col] > 1 && snakeDirection != 0) {
+        gameOver = 1;
+        return;
+    }
+
+    // check if the food was eaten
+    if (snake.row == food.row && snake.col == food.col) {
+        food.row = -1; // reset food
+        food.col = -1;
+
+        // increment snake length
+        snakeLength++;
+
+        // increment all the snake body segments
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                if (gameboard[row][col] > 0 ) {
+                    gameboard[row][col]++;
+                }
+            }
+        }
+    }
+
+    // add new segment at the snake head location
+    gameboard[snake.row][snake.col] = snakeLength + 1; // will be decremented in a moment
+
+    // decrement all the snake body segments, if segment is 0, turn the corresponding led off
+    for (int row = 0; row < 8; row++) {
+        for (int col = 0; col < 8; col++) {
+            // if there is a body segment, decrement it's value
+            if (gameboard[row][col] > 0 ) {
+                gameboard[row][col]--;
+            }
+
+            // display the current pixel
+            // TODO: uncomment
+            //matrix.setLed(0, row, col, gameboard[row][col] == 0 ? 0 : 1);
+        }
+    }
+}
+
+void unrollSnake() {
+    // switch off the food LED
+    //matrix.setLed(0, food.row, food.col, 0);
+
+    wait(IfxStm_getTicksFromMilliseconds(&MODULE_STM0, 800));
+    //delay(800);
+
+    // flash the screen 5 times
+    // TODO: this is a good idea: uncomment later
+//    for (int i = 0; i < 5; i++) {
+//        // invert the screen
+//        for (int row = 0; row < 8; row++) {
+//            for (int col = 0; col < 8; col++) {
+//                matrix.setLed(0, row, col, gameboard[row][col] == 0 ? 1 : 0);
+//            }
+//        }
+//
+//        delay(20);
+//
+//        // invert it back
+//        for (int row = 0; row < 8; row++) {
+//            for (int col = 0; col < 8; col++) {
+//                matrix.setLed(0, row, col, gameboard[row][col] == 0 ? 0 : 1);
+//            }
+//        }
+//
+//        delay(50);
+//
+//    }
+
+
+    //delay(600);
+
+    //TODO: this show the unrolled snake on the matrix, decide whether to keep it or not
+//    for (int i = 1; i <= snakeLength; i++) {
+//        for (int row = 0; row < 8; row++) {
+//            for (int col = 0; col < 8; col++) {
+//                if (gameboard[row][col] == i) {
+//                    //matrix.setLed(0, row, col, 0);
+//                    delay(100);
+//                }
+//            }
+//        }
+//    }
+}
+
+
+//handle gameover and win states: if gameOver || win restarts the game
+void handleGameStates() {
+    if (gameOver || win) {
+
+        unrollSnake();
+
+        //showScoreMessage(snakeLength - initialSnakeLength);
+
+        //if (gameOver) showGameOverMessage();
+        //else if (win) showWinMessage();
+
+        // re-init the game
+        win = 0;
+        gameOver = 0;
+        snake.row = rand()%8;
+        snake.col = rand()%8;
+        food.row = -1;
+        food.col = -1;
+        snakeLength = initialSnakeLength;
+        snakeDirection = 0;
+        // set all gameboard cells at 0
+        memset(gameboard, 0, sizeof(gameboard[0][0]) * 8 * 8);
+        // TODO: uncomment, use a cycle with setPin
+        // matrix.clearDisplay(0);
+    }
+}
+
+int append(int* actualcharposition, char *buffer,const char *str, int length)
+{
+    for(int a=0;a<length;a++){
+        int i=*actualcharposition;
+        buffer[i] = str[a];
+        (*actualcharposition)++;
+    }
+}
+
+//this function prints the gameboard to console for debug purpose
+void dumpGameBoard() {
+    // change dumping frequency
+    dump == 5000 ? dump = 0 : ++dump;
+    if (!dump) {
+        int counter=0;
+        char dumped[128]="";
+        append(&counter, dumped, "\n\n\n", 3);
+        //char* buff = "\n\n\n";
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                if (gameboard[row][col] < 10) append(&counter, dumped, " ", 1); //buff += " ";
+                char c = gameboard[row][col]+'0';
+                if (gameboard[row][col] != 0) append(&counter, dumped, &c, 1); //buff += gameboard[row][col];
+                else if (col == food.col && row == food.row) append(&counter, dumped, "@", 1);//buff += "@";
+                else append(&counter, dumped, "-", 1);//buff += "-";
+                append(&counter, dumped, " ", 1);//buff += " ";
+            }
+            append(&counter, dumped, "\r\n", 2);//buff += "\n";
+        }
+
+        IfxStdIf_DPipe_print(&g_stdInterface, dumped);
+        //Serial.println(buff);
+    }
+}
+
 
 
 
@@ -115,8 +334,11 @@ void runGame(void) {
     /* Function to initialize the game with default parameters */
     initGame();
     while (1) {
-        readEVADC();
+        generateFood();
         scanJoystick();
+        calculateSnake();  // calculates snake parameters
+        handleGameStates();
+        dumpGameBoard();
     }
 }
 
