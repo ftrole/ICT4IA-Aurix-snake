@@ -106,7 +106,7 @@ void scanJoystick() {
         snakeDirection - 2 == previousDirection && previousDirection != 0 ? snakeDirection = previousDirection : 0;
 
         // intelligently blink with the food TODO: this is only to make the food led blink at fixed rate
-        //
+        //matrix.setLed(0, food.row, food.col, millis() % 100 < 50 ? 1 : 0);
     }
 }
 
@@ -304,14 +304,14 @@ void dumpGameBoard() {
         //char* buff = "\n\n\n";
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                if (gameboard[row][col] < 10) append(&counter, dumped, " ", 1); //buff += " ";
+                if (gameboard[row][col] < 10) append(&counter, dumped, " ", 1);
                 char c = gameboard[row][col]+'0';
-                if (gameboard[row][col] != 0) append(&counter, dumped, &c, 1); //buff += gameboard[row][col];
-                else if (col == food.col && row == food.row) append(&counter, dumped, "@", 1);//buff += "@";
-                else append(&counter, dumped, "-", 1);//buff += "-";
-                append(&counter, dumped, " ", 1);//buff += " ";
+                if (gameboard[row][col] != 0) append(&counter, dumped, &c, 1);
+                else if (col == food.col && row == food.row) append(&counter, dumped, "@", 1);
+                else append(&counter, dumped, "-", 1);
+                append(&counter, dumped, " ", 1);
             }
-            append(&counter, dumped, "\r\n", 2);//buff += "\n";
+            append(&counter, dumped, "\r\n", 2);
         }
 
         IfxStdIf_DPipe_print(&g_stdInterface, dumped);
