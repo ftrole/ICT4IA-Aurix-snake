@@ -36,6 +36,8 @@ Libraries/iLLD/TC37A/Tricore/Asclin/Std \
 Libraries/iLLD/TC37A/Tricore/Cpu/Irq \
 Libraries/iLLD/TC37A/Tricore/Cpu/Std \
 Libraries/iLLD/TC37A/Tricore/Cpu/Trap \
+Libraries/iLLD/TC37A/Tricore/Edsadc/Edsadc \
+Libraries/iLLD/TC37A/Tricore/Edsadc/Std \
 Libraries/iLLD/TC37A/Tricore/Evadc/Adc \
 Libraries/iLLD/TC37A/Tricore/Evadc/Std \
 Libraries/iLLD/TC37A/Tricore/Gtm/Std \

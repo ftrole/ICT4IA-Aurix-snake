@@ -20,6 +20,8 @@ RM := rm -rf
 -include Libraries/iLLD/TC37A/Tricore/Gtm/Std/subdir.mk
 -include Libraries/iLLD/TC37A/Tricore/Evadc/Std/subdir.mk
 -include Libraries/iLLD/TC37A/Tricore/Evadc/Adc/subdir.mk
+-include Libraries/iLLD/TC37A/Tricore/Edsadc/Std/subdir.mk
+-include Libraries/iLLD/TC37A/Tricore/Edsadc/Edsadc/subdir.mk
 -include Libraries/iLLD/TC37A/Tricore/Cpu/Trap/subdir.mk
 -include Libraries/iLLD/TC37A/Tricore/Cpu/Std/subdir.mk
 -include Libraries/iLLD/TC37A/Tricore/Cpu/Irq/subdir.mk
