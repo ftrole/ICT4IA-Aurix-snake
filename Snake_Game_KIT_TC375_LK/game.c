@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "game.h"
 
+float res_EDSADC;
 // LED matrix brightness: between 0(darkest) and 15(brightest) TODO: check this
 const short intensity = 8;
 
@@ -78,8 +79,8 @@ void calibrateJoystick ()
     for (int i = 0; i < 10; i++)
     {
         readEVADC();
-        int j_x = (int) g_results[1].B.RESULT;
-        int j_y = (int) g_results[2].B.RESULT;
+        int j_x = (int) g_results[1].B.RESULT; //AN38
+        int j_y = (int) g_results[2].B.RESULT; //AN37
         values.x = values.x + j_x;
         values.y = values.y + j_y;
     }
@@ -91,19 +92,19 @@ void calibrateJoystick ()
 // watches joystick movements & blinks with food
 void scanJoystick ()
 {
-    int previousDirection = snakeDirection; // save the last direction
+    short previousDirection = snakeDirection; // save the last direction
     sint64 timestamp = now();
     readEVADC();
     run_EDSADC();
-    float res_EDSADC = (float) abs(g_resultEDSADC);
+    res_EDSADC = (float) abs(g_resultEDSADC);
 
-    while (now() < timestamp + snakeSpeed)
+    while (now() < timestamp + snakeSpeed) //this is bugged, either because the board is low or because of the debug settings: if snakespeed is low, the cycle is never executed
     {
-        //float raw = mapf(analogRead(Pin::potentiometer), 0, 1023, 0, 1); TODO
-        float raw = mapf(res_EDSADC, 0, 30000, 0, 1);
+        //float raw = mapf(analogRead(Pin::potentiometer), 0, 1023, 0, 1);
+        float raw = mapf(res_EDSADC, 0, 30000, 10, 1000);
         snakeSpeed = mapf(pow(raw, 3.5), 0, 1, 10, 1000); // change the speed exponentially
         if (snakeSpeed == 0)
-            snakeSpeed = 500; // safety: speed can not be 0
+            snakeSpeed = 10; // safety: speed can not be 0
 
         // determine the direction of the snake
         g_results[2].B.RESULT < joystickHome.y - joystickThreshold ? snakeDirection = up : 0;
@@ -336,8 +337,8 @@ void dumpGameBoard ()
             {
                 if (gameboard[row][col] < 10)
                     append(&counter, dumped, " ", 1);
-                char c = gameboard[row][col] + '0';
-                if (gameboard[row][col] != 0)
+                char c = gameboard[row][col]+'0';
+                if (gameboard[row][col] > 0)
                     append(&counter, dumped, &c, 1);
                 else if (col == food.col && row == food.row)
                     append(&counter, dumped, "@", 1);
@@ -347,7 +348,6 @@ void dumpGameBoard ()
             }
             append(&counter, dumped, "\r\n", 2);
         }
-
         IfxStdIf_DPipe_print(&g_stdInterface, dumped);
     }
 }
