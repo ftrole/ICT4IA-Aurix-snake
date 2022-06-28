@@ -7,9 +7,6 @@ float res_EDSADC;
 // LED matrix brightness: between 0(darkest) and 15(brightest) TODO: check this
 const short intensity = 8;
 
-//counter for dumping gameboard ( for DEBUG purposes)
-int dump = 0;
-
 // lower = faster message scrolling
 // TODO: control this
 const short messageSpeed = 5;
@@ -19,6 +16,11 @@ const short initialSnakeLength = 3;
 
 short win = 0;
 short gameOver = 0;
+
+//DEBUG FLAG: 1=active debug
+short DEBUG = 1;
+//counter for dumping gameboard (for DEBUG purposes, don't touch)
+int dump = 0;
 
 struct Point
 {
@@ -101,7 +103,7 @@ void scanJoystick ()
     while (now() < timestamp + snakeSpeed) //this is bugged, either because the board is low or because of the debug settings: if snakespeed is low, the cycle is never executed
     {
         //float raw = mapf(analogRead(Pin::potentiometer), 0, 1023, 0, 1);
-        float raw = mapf(res_EDSADC, 0, 30000, 10, 1000);
+        float raw = mapf(res_EDSADC, 0, 30000, 0, 1);
         snakeSpeed = mapf(pow(raw, 3.5), 0, 1, 10, 1000); // change the speed exponentially
         if (snakeSpeed == 0)
             snakeSpeed = 10; // safety: speed can not be 0
@@ -254,6 +256,7 @@ void unrollSnake ()
 //        }
 //
 //        delay(20);
+//        wait(IfxStm_getTicksFromMilliseconds(&MODULE_STM0, 60));
 //
 //        // invert it back
 //        for (int row = 0; row < 8; row++) {
@@ -263,10 +266,12 @@ void unrollSnake ()
 //        }
 //
 //        delay(50);
+//        wait(IfxStm_getTicksFromMilliseconds(&MODULE_STM0, 100));
 //
 //    }
 
     //delay(600);
+    //        wait(IfxStm_getTicksFromMilliseconds(&MODULE_STM0, 100));
 
     //TODO: this show the unrolled snake on the matrix, decide whether to keep it or not
 //    for (int i = 1; i <= snakeLength; i++) {
@@ -337,7 +342,7 @@ void dumpGameBoard ()
             {
                 if (gameboard[row][col] < 10)
                     append(&counter, dumped, " ", 1);
-                char c = gameboard[row][col]+'0';
+                char c = gameboard[row][col] + '0';
                 if (gameboard[row][col] > 0)
                     append(&counter, dumped, &c, 1);
                 else if (col == food.col && row == food.row)
@@ -364,13 +369,24 @@ void runGame (void)
 {
     /* Function to initialize the game with default parameters */
     initGame();
-    while (1)
+    if (DEBUG == 1)
     {
-        generateFood();
-        scanJoystick();
-        calculateSnake();  // calculates snake parameters
-        handleGameStates();
-        dumpGameBoard();
+        while (1)
+        {
+            generateFood();
+            scanJoystick();
+            calculateSnake();  // calculates snake parameters
+            handleGameStates();
+            dumpGameBoard(); // executed only in case of active debug
+        }
     }
+    else
+        while (1)
+        {
+            generateFood();
+            scanJoystick();
+            calculateSnake();  // calculates snake parameters
+            handleGameStates();
+        }
 }
 
