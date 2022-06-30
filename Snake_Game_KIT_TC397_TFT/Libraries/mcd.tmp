@@ -1,0 +1,75 @@
+MCD Implementation Info
+  Vendor:      Infineon Technologies
+  Version:     1.13.0
+  API version: 1.1
+  Date:        Jan 24 2022
+
+MCD Core Connection Info
+    system:      Real HW
+MCD Core Connection Info
+    host:        localhost
+    server_port: 62078
+    system:      Real HW
+    acc_hw:      DAS JDS Application Kit TC397 V2.0 AK6MJRND
+    device_type: 0x20205083
+    device:      TC39x
+MCD Core Connection Info
+    host:        localhost
+    server_port: 62078
+    system:      Real HW
+    acc_hw:      DAS JDS Application Kit TC397 V2.0 AK6MJRND
+    device_type: 0x20205083
+    device:      TC39x
+    core:        Core 0: CPU0 TriCore 1.6P
+    core_type:   44
+    core_id:     0x00C0C021
+MCD Core Connection Info
+    host:        localhost
+    server_port: 62078
+    system:      Real HW
+    acc_hw:      DAS JDS Application Kit TC397 V2.0 AK6MJRND
+    device_type: 0x20205083
+    device:      TC39x
+    core:        Core 1: CPU1 TriCore 1.6P
+    core_type:   44
+    core_id:     0x00C0C021
+MCD Core Connection Info
+    host:        localhost
+    server_port: 62078
+    system:      Real HW
+    acc_hw:      DAS JDS Application Kit TC397 V2.0 AK6MJRND
+    device_type: 0x20205083
+    device:      TC39x
+    core:        Core 2: CPU2 TriCore 1.6P
+    core_type:   44
+    core_id:     0x00C0C021
+MCD Core Connection Info
+    host:        localhost
+    server_port: 62078
+    system:      Real HW
+    acc_hw:      DAS JDS Application Kit TC397 V2.0 AK6MJRND
+    device_type: 0x20205083
+    device:      TC39x
+    core:        Core 3: CPU3 TriCore 1.6P
+    core_type:   44
+    core_id:     0x00C0C021
+MCD Core Connection Info
+    host:        localhost
+    server_port: 62078
+    system:      Real HW
+    acc_hw:      DAS JDS Application Kit TC397 V2.0 AK6MJRND
+    device_type: 0x20205083
+    device:      TC39x
+    core:        Core 4: CPU4 TriCore 1.6P
+    core_type:   44
+    core_id:     0x00C0C021
+MCD Core Connection Info
+    host:        localhost
+    server_port: 62078
+    system:      Real HW
+    acc_hw:      DAS JDS Application Kit TC397 V2.0 AK6MJRND
+    device_type: 0x20205083
+    device:      TC39x
+    core:        Core 5: CPU5 TriCore 1.6P
+    core_type:   44
+    core_id:     0x00C0C021
