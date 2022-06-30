@@ -28,10 +28,21 @@
 #ifndef ADC_QUEUED_SCAN_H_
 #define ADC_QUEUED_SCAN_H_
 
+#include "IfxEvadc_Adc.h"
+#include "Bsp.h"
+#include "IfxAsclin_Asc.h"
+
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
 void initEVADC(void);
 void readEVADC(void);
+void init_UART(void);
+extern Ifx_EVADC_G_RES g_results[3];
+
+/* Variable for Standard interface */
+extern IfxAsclin_Asc g_asc;
+extern IfxStdIf_DPipe g_stdInterface;
+
 
 #endif /* ADC_QUEUED_SCAN_H_ */

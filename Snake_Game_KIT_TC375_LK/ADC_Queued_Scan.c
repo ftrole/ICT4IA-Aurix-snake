@@ -28,10 +28,7 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 /*********************************************************************************************************************/
-#include "IfxEvadc_Adc.h"
 #include "ADC_Queued_Scan.h"
-#include "Bsp.h"
-#include "IfxAsclin_Asc.h"
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -170,11 +167,11 @@ void readEVADC()
         /* Store result */
         g_results[i] = conversionResult;
 
-        IfxStdIf_DPipe_print(&g_stdInterface, "ADC Sample: %d\r\n", conversionResult.B.RESULT);
+        //IfxStdIf_DPipe_print(&g_stdInterface, "ADC Sample: %d\r\n", conversionResult.B.RESULT);
 
     }
-        IfxStdIf_DPipe_print(&g_stdInterface, "\r\n");
-        wait(IfxStm_getTicksFromMilliseconds(&MODULE_STM0, 1000));
+        //IfxStdIf_DPipe_print(&g_stdInterface, "\r\n");
+        //wait(IfxStm_getTicksFromMilliseconds(&MODULE_STM0, 1000));
 }
 /* ASCLIN TX Interrupt Service Routine */
 IFX_INTERRUPT(ISR_ASCLIN_Tx, 0, ISR_PRIORITY_ASCLIN_TX);
